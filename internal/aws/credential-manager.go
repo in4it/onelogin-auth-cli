@@ -23,10 +23,10 @@ type CredentialFileGetter struct {
 	Homedir string
 }
 
-func (c CredentialFileGetter) SetHomeDir(homedir string) {
+func (c *CredentialFileGetter) SetHomeDir(homedir string) {
 	c.Homedir = homedir
 }
-func (c CredentialFileGetter) Get() (string, error) {
+func (c *CredentialFileGetter) Get() (string, error) {
 	credentials, err := ioutil.ReadFile(c.Homedir + "/.aws/credentials")
 	if err != nil {
 		return "", fmt.Errorf("Could not read file: %s", err)
@@ -34,7 +34,7 @@ func (c CredentialFileGetter) Get() (string, error) {
 
 	return string(credentials), nil
 }
-func (c CredentialFileGetter) Exists() (bool, error) {
+func (c *CredentialFileGetter) Exists() (bool, error) {
 	credentialsFileExists := false
 
 	if _, err := os.Stat(c.Homedir + "/.aws/credentials"); err == nil {
@@ -51,10 +51,10 @@ type CredentialFileWriter struct {
 	Homedir string
 }
 
-func (c CredentialFileWriter) Write(b []byte) error {
+func (c *CredentialFileWriter) Write(b []byte) error {
 	return os.WriteFile(c.Homedir+"/.aws/credentials", b, 0600)
 }
-func (c CredentialFileWriter) SetHomeDir(homedir string) {
+func (c *CredentialFileWriter) SetHomeDir(homedir string) {
 	c.Homedir = homedir
 }
 
@@ -81,11 +81,20 @@ func SetCredentials(credFileGetter CredentialFileGetterIface, credFileWriter Cre
 		}
 		if profileExists(credentials, profileName) {
 			err = updateCredential(credFileWriter, credentials, accessKey, secretAccessKey, sessionToken, region, profileName)
+			if err != nil {
+				return fmt.Errorf("updateCredential error: %s", err)
+			}
 		} else {
-			appendCredential(credFileWriter, credentials, accessKey, secretAccessKey, sessionToken, region, profileName)
+			err = appendCredential(credFileWriter, credentials, accessKey, secretAccessKey, sessionToken, region, profileName)
+			if err != nil {
+				return fmt.Errorf("appendCredential error: %s", err)
+			}
 		}
 	} else { // write new file if credential file doesn't exist
-		writeCredentialAsNewFile(credFileWriter, accessKey, secretAccessKey, sessionToken, region, profileName)
+		err = writeCredentialAsNewFile(credFileWriter, accessKey, secretAccessKey, sessionToken, region, profileName)
+		if err != nil {
+			return fmt.Errorf("writeCredentialAsNewFile error: %s", err)
+		}
 	}
 
 	return nil
@@ -125,6 +134,7 @@ func updateCredential(writer CredentialFileWriterIface, credentials, accessKey, 
 	return writer.Write([]byte(newCredentials))
 }
 func appendCredential(writer CredentialFileWriterIface, credentials, accessKey, secretAccessKey, sessionToken, region, profileName string) error {
+	credentials = strings.TrimRight(credentials, "\n")
 	if credentials != "" {
 		credentials += "\n\n"
 	}

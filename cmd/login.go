@@ -107,8 +107,8 @@ var loginCmd = &cobra.Command{
 			os.Exit(1)
 		}
 		err = intAWS.SetCredentials(
-			intAWS.CredentialFileGetter{},
-			intAWS.CredentialFileWriter{},
+			&intAWS.CredentialFileGetter{},
+			&intAWS.CredentialFileWriter{},
 			*result.Credentials.AccessKeyId,
 			*result.Credentials.SecretAccessKey,
 			*result.Credentials.SessionToken,
