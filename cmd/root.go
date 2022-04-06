@@ -1,9 +1,10 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"log"
 )
 
 type Config struct {
@@ -19,10 +20,11 @@ type OneLoginConf struct {
 	AccountName  string `yaml:"onelogin-account"`
 }
 type Account struct {
-	Name        string `yaml:"name"`
-	AppID       string `yaml:"appID"`
-	AccountID   string `yaml:"accountID"`
-	ProfileName string `yaml:"profileName"`
+	Name            string `yaml:"name"`
+	AppID           string `yaml:"appID"`
+	AccountID       string `yaml:"accountID"`
+	ProfileName     string `yaml:"profileName"`
+	DurationSeconds int64  `yaml:"durationSeconds"`
 }
 
 var config Config
