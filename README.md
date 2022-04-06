@@ -16,6 +16,7 @@ onelogin:
   clientID: clientID of API credential with "Authentication only"
   clientSecret: client Secret of API credential
   accountName: onelogin account name
+  durationSeconds: 28800 # duration of the credentials in seconds (or remove for the default of 3600)
 accounts:
   - name: myapp-prod
     appID: onelogin app id (e.g. 123456)

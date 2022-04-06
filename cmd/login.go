@@ -97,7 +97,11 @@ var loginCmd = &cobra.Command{
 		//AssumeRole With SAML on AWS
 		accountID := config.Accounts[*account].AccountID
 		profileName := config.Accounts[*account].ProfileName
-		result, err := intAWS.AssumeRoleWithSAML(accountID, config.Roles[*role], assertionPayload)
+		durationSeconds := config.Accounts[*account].DurationSeconds
+		if durationSeconds == 0 {
+			durationSeconds = 3600
+		}
+		result, err := intAWS.AssumeRoleWithSAML(accountID, config.Roles[*role], assertionPayload, durationSeconds)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
