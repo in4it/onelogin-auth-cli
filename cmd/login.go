@@ -106,13 +106,20 @@ var loginCmd = &cobra.Command{
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		intAWS.SetCredentials(
+		err = intAWS.SetCredentials(
+			intAWS.CredentialFileGetter{},
+			intAWS.CredentialFileWriter{},
 			*result.Credentials.AccessKeyId,
 			*result.Credentials.SecretAccessKey,
 			*result.Credentials.SessionToken,
 			config.DefaultRegion,
 			profileName,
 		)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
 		fmt.Printf("Successfully set credentials for: %s\n", profileName)
 	},
 }
