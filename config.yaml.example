@@ -1,0 +1,13 @@
+onelogin:
+  clientID: clientID of API credential with "Authentication only"
+  clientSecret: client Secret of API credential
+  accountName: onelogin account name
+accounts:
+  - name: myapp-prod
+    appID: onelogin app id (e.g. 123456)
+    accountID: AWS account ID
+    profileName: AWS IAM profile to store credentials in (in ~/.aws/credentials)
+roles:
+  - iam-role-1 # role that is configured in onelogin and IAM to use with the onelogin identity provider
+  - iam-role-2
+defaultRegion: us-east-1
