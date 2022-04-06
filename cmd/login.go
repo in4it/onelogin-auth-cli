@@ -109,7 +109,7 @@ var loginCmd = &cobra.Command{
 			config.DefaultRegion,
 			profileName,
 		)
-		fmt.Printf("Successfully setted credentials for: %s\n", profileName)
+		fmt.Printf("Successfully set credentials for: %s\n", profileName)
 	},
 }
 

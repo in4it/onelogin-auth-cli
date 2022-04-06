@@ -30,7 +30,7 @@ var config Config
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "onelogin-auth",
-	Short: "OneLogin authenticatio CLI Tool",
+	Short: "OneLogin authentication CLI",
 }
 
 func Execute() {
