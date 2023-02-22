@@ -76,9 +76,9 @@ var loginCmd = &cobra.Command{
 
 		//MFA Device verification
 		var deviceID *int
-		if assertionResponse.Status.Message == "MFA is required for this user" {
+		if assertionResponse.Message == onelogin.MFA_REQUIRED_STRING {
 			fmt.Println("MFA Required, select a device:")
-			deviceID, err = getDeviceID(assertionResponse.Data[0].Devices)
+			deviceID, err = getDeviceID(assertionResponse.Devices)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -86,7 +86,7 @@ var loginCmd = &cobra.Command{
 			if err != nil {
 				log.Fatalln(err)
 			}
-			verificationResponse, err := onelogin.VerifyFactor(token, *deviceID, appID, assertionResponse.Data[0].StateToken, mfaCode)
+			verificationResponse, err := onelogin.VerifyFactor(token, *deviceID, appID, assertionResponse.StateToken, mfaCode)
 			if err != nil {
 				fmt.Println(err)
 				os.Exit(1)
@@ -166,7 +166,7 @@ func getDeviceID(devices []onelogin.Device) (*int, error) {
 	}
 	for _, v := range devices {
 		if v.DeviceType == selectedDeviceType {
-			return &v.DeviceId, nil
+			return &v.DeviceID, nil
 		}
 	}
 	return nil, fmt.Errorf("No device found")

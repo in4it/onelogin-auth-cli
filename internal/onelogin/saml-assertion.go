@@ -8,40 +8,34 @@ import (
 	"net/http"
 )
 
+const MFA_REQUIRED_STRING = "MFA is required for this user"
+
 type SAMLAssertionBody struct {
 	UsernameOrEmail string `json:"username_or_email"`
 	Password        string `json:"password"`
 	AppID           string `json:"app_id"`
 	SubDomain       string `json:"subdomain"`
 }
-
 type SAMLAssertionResponse struct {
-	Data []struct {
-		Devices     []Device `json:"devices"`
-		CallbackUrl string   `json:"callback_url"`
-		User        struct {
-			Username  string `json:"username"`
-			Email     string `json:"email"`
-			Lastname  string `json:"lastname"`
-			Id        int    `json:"id"`
-			Firstname string `json:"firstname"`
-		} `json:"user"`
-		StateToken string `json:"state_token"`
-	} `json:"data"`
-	Status struct {
-		Message string `json:"message"`
-		Error   bool   `json:"error"`
-		Type    string `json:"type"`
-		Code    int    `json:"code"`
-	} `json:"status"`
+	StateToken  string   `json:"state_token"`
+	Message     string   `json:"message"`
+	Devices     []Device `json:"devices"`
+	CallbackURL string   `json:"callback_url"`
+	User        User     `json:"user"`
 }
-
 type Device struct {
-	DeviceId   int    `json:"device_id"`
+	DeviceID   int    `json:"device_id"`
 	DeviceType string `json:"device_type"`
 }
+type User struct {
+	Lastname  string `json:"lastname"`
+	Username  string `json:"username"`
+	Email     string `json:"email"`
+	Firstname string `json:"firstname"`
+	ID        int    `json:"id"`
+}
 
-const SAMLAssertionURl = OneLoginAPIURL + "api/1/saml_assertion"
+const SAMLAssertionURl = OneLoginAPIURL + "api/2/saml_assertion"
 
 func SAMLAssertion(token, login, password, appID, oneloginDomain string) (*SAMLAssertionResponse, error) {
 
@@ -75,8 +69,8 @@ func SAMLAssertion(token, login, password, appID, oneloginDomain string) (*SAMLA
 	if err != nil {
 		return nil, err
 	}
-	if responseObject.Status.Code != 200 {
-		return nil, fmt.Errorf(responseObject.Status.Message)
+	if responseObject.Message != "Success" && responseObject.Message != MFA_REQUIRED_STRING {
+		return nil, fmt.Errorf(responseObject.Message)
 	}
 
 	return &responseObject, nil

@@ -17,16 +17,11 @@ type VerifyFactorBody struct {
 }
 
 type VerifyFactorResponse struct {
-	Data   string `json:"data"`
-	Status struct {
-		Message string `json:"message"`
-		Error   bool   `json:"error"`
-		Type    string `json:"type"`
-		Code    int    `json:"code"`
-	} `json:"status"`
+	Data    string `json:"data"`
+	Message string `json:"message"`
 }
 
-const VerifyFactorURL = OneLoginAPIURL + "api/1/saml_assertion/verify_factor"
+const VerifyFactorURL = OneLoginAPIURL + "api/2/saml_assertion/verify_factor"
 
 func VerifyFactor(token string, deviceID int, appID string, stateToken string, mfaCode string) (*VerifyFactorResponse, error) {
 	newBody := VerifyFactorBody{
@@ -59,8 +54,8 @@ func VerifyFactor(token string, deviceID int, appID string, stateToken string, m
 	if err != nil {
 		return nil, err
 	}
-	if responseObject.Status.Code != 200 {
-		return nil, fmt.Errorf(responseObject.Status.Message)
+	if responseObject.Message != "Success" {
+		return nil, fmt.Errorf(responseObject.Message)
 	}
 
 	return &responseObject, nil
