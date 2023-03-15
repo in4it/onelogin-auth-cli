@@ -11,3 +11,16 @@ roles:
   - iam-role-1 # role that is configured in onelogin and IAM to use with the onelogin identity provider
   - iam-role-2
 defaultRegion: us-east-1
+
+# Credentials can be specified in the YAML config file, but it is not recommended
+# because it will store the credentials in plain text on your disk.
+# It is better to use the environment variables EMAIL, PASSWORD and OTP.
+credentials:
+  # it can be overridden by the EMAIL environment variable
+  email: email of user to use for authentication
+  # it makes no sense to use this option in the YAML config file,
+  # but it can be overridden by the PASSWORD environment variable
+  password: password of user to use for authentication
+  # it makes no sense to use this option in the YAML config file,
+  # but it can be overridden by the OTP environment variable
+  otp: otpToken of user to use for authentication

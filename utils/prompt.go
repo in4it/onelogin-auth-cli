@@ -2,9 +2,10 @@ package utils
 
 import (
 	"fmt"
-	"github.com/manifoldco/promptui"
 	"log"
 	"strconv"
+
+	"github.com/manifoldco/promptui"
 )
 
 func PromptForInt(label string) (*int, error) {
@@ -15,7 +16,7 @@ func PromptForInt(label string) (*int, error) {
 	}
 
 	prompt := promptui.Prompt{
-		Label:    label + ":",
+		Label:    label,
 		Validate: validate,
 	}
 
@@ -43,7 +44,7 @@ func PromptForString(label string) (string, error) {
 	}
 
 	prompt := promptui.Prompt{
-		Label:    label + ":",
+		Label:    label,
 		Validate: validate,
 	}
 
@@ -67,7 +68,7 @@ func PromptForSecretString(label string) (string, error) {
 	}
 
 	prompt := promptui.Prompt{
-		Label:    label + ":",
+		Label:    label,
 		Validate: validate,
 		Mask:     rune('*'),
 	}
@@ -82,10 +83,14 @@ func PromptForSecretString(label string) (string, error) {
 	return result, nil
 }
 
-func PromptSelect(label string, options []string) (string, error) {
+func PromptSelect(label string, options []string, skipSingleChoice bool) (string, error) {
+
+	if skipSingleChoice && len(options) == 1 {
+		return options[0], nil
+	}
 
 	prompt := promptui.Select{
-		Label: label + ":",
+		Label: label,
 		Items: options,
 	}
 

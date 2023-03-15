@@ -9,9 +9,16 @@ import (
 
 type Config struct {
 	Onelogin      OneLoginConf
-	Accounts      []Account `yaml:"accounts"`
-	Roles         []string  `yaml:"roles"`
-	DefaultRegion string    `yaml:"defaultRegion"`
+	Credentials   Credentials `yaml:"credentials"`
+	Accounts      []Account   `yaml:"accounts"`
+	Roles         []string    `yaml:"roles"`
+	DefaultRegion string      `yaml:"defaultRegion"`
+}
+
+type Credentials struct {
+	Email    string `yaml:"email"`
+	Password string `yaml:"password"`
+	OTP      string `yaml:"otp"`
 }
 
 type OneLoginConf struct {
@@ -58,6 +65,10 @@ func LoadConfig(path string) (config Config, err error) {
 	if err != nil {
 		return
 	}
+
+	viper.BindEnv("credentials.email", "EMAIL")
+	viper.BindEnv("credentials.password", "PASSWORD")
+	viper.BindEnv("credentials.otp", "OTP")
 
 	err = viper.Unmarshal(&config)
 	return

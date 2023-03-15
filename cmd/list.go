@@ -18,7 +18,7 @@ var listCmd = &cobra.Command{
 
 		fmt.Println("Accounts:")
 		for k, v := range config.Accounts {
-			fmt.Printf("[%d] %s\n", k, v)
+			fmt.Printf("[%d] %s\n", k, v.Name)
 		}
 	},
 }
