@@ -24,7 +24,13 @@ var loginCmd = &cobra.Command{
 		//Get Role and Accounts from parameters or from keyboard input
 		if len(args) != 2 {
 			role, err = getRole(config.Roles)
+			if err != nil {
+				log.Fatalln(err)
+			}
 			account, err = getAccount(config.Accounts)
+			if err != nil {
+				log.Fatalln(err)
+			}
 		} else {
 			roleNum, err := strconv.Atoi(args[0])
 			if err != nil {
@@ -58,13 +64,24 @@ var loginCmd = &cobra.Command{
 		}
 
 		//Get email and password from keyboard input
-		email, err := utils.PromptForString("Email")
-		if err != nil {
-			log.Fatalln(err)
+		var email string
+		if config.Credentials.Email == "" {
+			email, err = utils.PromptForString("Email")
+			if err != nil {
+				log.Fatalln(err)
+			}
+		} else {
+			email = config.Credentials.Email
 		}
-		password, err := utils.PromptForSecretString("Password")
-		if err != nil {
-			log.Fatalln(err)
+
+		var password string
+		if config.Credentials.Password == "" {
+			password, err = utils.PromptForSecretString("Password")
+			if err != nil {
+				log.Fatalln(err)
+			}
+		} else {
+			password = config.Credentials.Password
 		}
 
 		//SAML Assertion and MFA Devices retrieval
@@ -82,10 +99,17 @@ var loginCmd = &cobra.Command{
 			if err != nil {
 				log.Fatalln(err)
 			}
-			mfaCode, err := utils.PromptForSecretString("MFA Code")
-			if err != nil {
-				log.Fatalln(err)
+
+			var mfaCode string
+			if config.Credentials.OTP == "" {
+				mfaCode, err = utils.PromptForSecretString("MFA Code")
+				if err != nil {
+					log.Fatalln(err)
+				}
+			} else {
+				mfaCode = config.Credentials.OTP
 			}
+
 			verificationResponse, err := onelogin.VerifyFactor(token, *deviceID, appID, assertionResponse.StateToken, mfaCode)
 			if err != nil {
 				fmt.Println(err)
@@ -126,7 +150,7 @@ var loginCmd = &cobra.Command{
 
 func getRole(roles []string) (*int, error) {
 
-	roleName, err := utils.PromptSelect("Role", config.Roles)
+	roleName, err := utils.PromptSelect("Role", config.Roles, false)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +167,7 @@ func getAccount(accounts []Account) (*int, error) {
 	for _, v := range accounts {
 		accountsName = append(accountsName, v.Name)
 	}
-	accountName, err := utils.PromptSelect("Account", accountsName)
+	accountName, err := utils.PromptSelect("Account", accountsName, false)
 	if err != nil {
 		return nil, err
 	}
@@ -160,7 +184,7 @@ func getDeviceID(devices []onelogin.Device) (*int, error) {
 	for _, v := range devices {
 		deviceTypes = append(deviceTypes, v.DeviceType)
 	}
-	selectedDeviceType, err := utils.PromptSelect("MFA Device", deviceTypes)
+	selectedDeviceType, err := utils.PromptSelect("MFA Device", deviceTypes, true)
 	if err != nil {
 		log.Fatalln(err)
 	}
