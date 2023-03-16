@@ -28,6 +28,18 @@ roles:
 defaultRegion: us-east-1
 ```
 
+### Environment Variables (optional)
+
+If you use external password managers, you can use environment variables to automate the login process.
+
+The following environment variables are supported:
+
+ - `EMAIL` - email address of the user to login as
+ - `PASSWORD` - password of the user to login as
+ - `OTP` - One Time Password (if MFA is enabled)
+
+If you prefere to specify the path to the config file, you can use the `ONELOGIN_AUTH_CLI_CONFIG_FILE` environment variable.
+
 ### Login
 
 ```
