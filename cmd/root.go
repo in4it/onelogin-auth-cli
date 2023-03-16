@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"log"
+	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -55,9 +56,14 @@ func init() {
 }
 
 func LoadConfig(path string) (config Config, err error) {
-	viper.AddConfigPath(path)
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
+	userDefinedConfigFile := os.Getenv("ONELOGIN_AUTH_CLI_CONFIG_FILE")
+	if userDefinedConfigFile != "" {
+		viper.SetConfigFile(userDefinedConfigFile)
+	} else {
+		viper.AddConfigPath(path)
+		viper.SetConfigName("config")
+		viper.SetConfigType("yaml")
+	}
 
 	viper.AutomaticEnv()
 
