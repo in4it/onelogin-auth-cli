@@ -1,0 +1,42 @@
+name: Test And Release
+
+on:
+  push:
+    tags:
+      - "v*"
+    branches:
+      - "*"
+
+jobs:
+  # -------- Test job -------- #
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+
+      - name: Test
+        run: go test -v ./...
+
+  # -------- Release job -------- #
+  # Runs only if the event is a tag push. Tag name must start with "v"
+  release:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v3
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

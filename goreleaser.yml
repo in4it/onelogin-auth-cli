@@ -1,0 +1,13 @@
+project_name: onelogin-auth-cli
+
+release:
+  prerelease: auto
+
+builds:
+  - binary: onelogin-auth-cli
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
