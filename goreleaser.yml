@@ -4,7 +4,7 @@ release:
   prerelease: auto
 
 builds:
-  - binary: onelogin-auth-cli
+  - binary: onelogin-auth
     goos:
       - darwin
       - linux
