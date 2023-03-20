@@ -44,7 +44,7 @@ The following environment variables are supported:
  - `PASSWORD` - password of the user to login as
  - `OTP` - One Time Password (if MFA is enabled)
 
-If you prefere to specify the path to the config file, you can use the `ONELOGIN_AUTH_CLI_CONFIG_FILE` environment variable.
+If you prefer to specify the path to the config file, you can use the `ONELOGIN_AUTH_CLI_CONFIG_FILE` environment variable.
 
 ### Login
 
