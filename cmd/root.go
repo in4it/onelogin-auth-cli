@@ -27,11 +27,21 @@ type OneLoginConf struct {
 	AccountName  string `yaml:"onelogin-account"`
 }
 type Account struct {
-	Name            string `yaml:"name"`
-	AppID           string `yaml:"appID"`
-	AccountID       string `yaml:"accountID"`
-	ProfileName     string `yaml:"profileName"`
-	DurationSeconds int64  `yaml:"durationSeconds"`
+	Name            string            `yaml:"name"`
+	AppID           string            `yaml:"appID"`
+	AppIDsByRole    map[string]string `yaml:"appIDsByRole"`
+	AccountID       string            `yaml:"accountID"`
+	ProfileName     string            `yaml:"profileName"`
+	DurationSeconds int64             `yaml:"durationSeconds"`
+}
+
+func (a *Account) GetAppID(role string) string {
+	if a.AppIDsByRole != nil {
+		if appID, ok := a.AppIDsByRole[role]; ok {
+			return appID
+		}
+	}
+	return a.AppID
 }
 
 var config Config

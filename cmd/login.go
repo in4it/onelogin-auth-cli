@@ -55,7 +55,8 @@ var loginCmd = &cobra.Command{
 			fmt.Println("Role: ", config.Roles[*role])
 			fmt.Println("Account: ", config.Accounts[*account].Name)
 		}
-		appID := config.Accounts[*account].AppID
+
+		appID := config.Accounts[*account].GetAppID(config.Roles[*role])
 
 		//Get OneLogin access Token
 		token, err := onelogin.GetAccessToken(config.Onelogin.ClientID, config.Onelogin.ClientSecret)
