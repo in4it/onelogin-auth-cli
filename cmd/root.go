@@ -45,12 +45,17 @@ func (a *Account) GetAppID(role string) string {
 	return a.AppID
 }
 
+var version string
 var config Config
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "onelogin-auth",
 	Short: "OneLogin authentication CLI",
+}
+
+func SetVersion(v string) {
+	version = v
 }
 
 func Execute() {
