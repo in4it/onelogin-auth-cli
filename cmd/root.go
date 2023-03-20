@@ -1,7 +1,8 @@
+//go:build !testing
+
 package cmd
 
 import (
-	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -62,15 +63,7 @@ func Execute() {
 	cobra.CheckErr(rootCmd.Execute())
 }
 
-func init() {
-	var err error
-	config, err = LoadConfig("./")
-	if err != nil {
-		log.Fatalln(err)
-	}
-}
-
-func LoadConfig(path string) (config Config, err error) {
+func LoadConfig(path string) (err error) {
 	userDefinedConfigFile := os.Getenv("ONELOGIN_AUTH_CLI_CONFIG_FILE")
 	if userDefinedConfigFile != "" {
 		viper.SetConfigFile(userDefinedConfigFile)

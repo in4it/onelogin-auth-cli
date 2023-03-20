@@ -1,0 +1,10 @@
+onelogin:
+  clientID: 123abc
+  clientSecret: def456
+  accountName: testdata
+  durationSeconds: 28800
+accounts:
+  - name: myapp
+    appID: 123456
+    accountID: 0123456789
+    profileName: test-profile

@@ -160,7 +160,7 @@ func getRole(roles []string) (*int, error) {
 			return &k, nil
 		}
 	}
-	return nil, fmt.Errorf("Role not found")
+	return nil, fmt.Errorf("role not found")
 }
 
 func getAccount(accounts []Account) (*int, error) {
@@ -194,7 +194,7 @@ func getDeviceID(devices []onelogin.Device) (*int, error) {
 			return &v.DeviceID, nil
 		}
 	}
-	return nil, fmt.Errorf("No device found")
+	return nil, fmt.Errorf("no device found")
 }
 
 func init() {
