@@ -23,7 +23,7 @@ type VerifyFactorResponse struct {
 
 const VerifyFactorURL = OneLoginAPIURL + "api/2/saml_assertion/verify_factor"
 
-func VerifyFactor(token string, deviceID int, appID string, stateToken string, mfaCode string) (*VerifyFactorResponse, error) {
+func (o Client) VerifyFactor(client HttpClient, token string, deviceID int, appID string, stateToken string, mfaCode string) (*VerifyFactorResponse, error) {
 	newBody := VerifyFactorBody{
 		AppID:      appID,
 		DeviceID:   strconv.Itoa(deviceID),
@@ -41,7 +41,6 @@ func VerifyFactor(token string, deviceID int, appID string, stateToken string, m
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "bearer:"+token)
-	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err

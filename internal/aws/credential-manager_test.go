@@ -36,7 +36,7 @@ func TestSetCredentialsEmpty(t *testing.T) {
 		CredentialExists: true,
 	}
 	mockWriter := MockCredentialFileWriter{}
-	err := SetCredentials(
+	err := Client{}.SetCredentials(
 		mockGetter,
 		&mockWriter,
 		"accessKey",
@@ -59,7 +59,7 @@ func TestSetCredentialsNonExisting(t *testing.T) {
 		CredentialExists: false,
 	}
 	mockWriter := MockCredentialFileWriter{}
-	err := SetCredentials(
+	err := Client{}.SetCredentials(
 		mockGetter,
 		&mockWriter,
 		"accessKey",
@@ -81,7 +81,7 @@ func TestSetCredentialsExistingFile(t *testing.T) {
 		CredentialExists: true,
 	}
 	mockWriter := MockCredentialFileWriter{}
-	err := SetCredentials(
+	err := Client{}.SetCredentials(
 		mockGetter,
 		&mockWriter,
 		"accessKey",
@@ -105,7 +105,7 @@ func TestSetCredentialsExistingFileReplace1(t *testing.T) {
 		CredentialExists: true,
 	}
 	mockWriter := MockCredentialFileWriter{}
-	err := SetCredentials(
+	err := Client{}.SetCredentials(
 		mockGetter,
 		&mockWriter,
 		"accessKey",
@@ -129,7 +129,7 @@ func TestSetCredentialsExistingFileReplace2(t *testing.T) {
 		CredentialExists: true,
 	}
 	mockWriter := MockCredentialFileWriter{}
-	err := SetCredentials(
+	err := Client{}.SetCredentials(
 		mockGetter,
 		&mockWriter,
 		"accessKey",
@@ -153,7 +153,7 @@ func TestSetCredentialsExistingFileReplace3(t *testing.T) {
 		CredentialExists: true,
 	}
 	mockWriter := MockCredentialFileWriter{}
-	err := SetCredentials(
+	err := Client{}.SetCredentials(
 		mockGetter,
 		&mockWriter,
 		"accessKey",

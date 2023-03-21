@@ -6,7 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/sts"
 )
 
-func AssumeRoleWithSAML(accountID string, role string, assertionPayload string, durationSeconds int64) (*sts.AssumeRoleWithSAMLOutput, error) {
+func (c Client) AssumeRoleWithSAML(accountID string, role string, assertionPayload string, durationSeconds int64) (*sts.AssumeRoleWithSAMLOutput, error) {
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String("us-east-1"),
 	})

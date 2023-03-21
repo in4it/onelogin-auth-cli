@@ -27,7 +27,7 @@ type AccessTokenResponse struct {
 	} `json:"data"`
 }
 
-func GetAccessToken(id, secret string) (string, error) {
+func (o Client) GetAccessToken(client HttpClient, id, secret string) (string, error) {
 
 	body := "{\"grant_type\":\"client_credentials\"}"
 
@@ -37,7 +37,6 @@ func GetAccessToken(id, secret string) (string, error) {
 	}
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("Authorization", "client_id:"+id+", client_secret:"+secret)
-	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", err

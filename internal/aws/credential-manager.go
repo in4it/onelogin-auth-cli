@@ -58,7 +58,7 @@ func (c *CredentialFileWriter) SetHomeDir(homedir string) {
 	c.Homedir = homedir
 }
 
-func SetCredentials(credFileGetter CredentialFileGetterIface, credFileWriter CredentialFileWriterIface, accessKey, secretAccessKey, sessionToken, region, profileName string) error {
+func (c Client) SetCredentials(credFileGetter CredentialFileGetterIface, credFileWriter CredentialFileWriterIface, accessKey, secretAccessKey, sessionToken, region, profileName string) error {
 	// set user homedir
 	homedir, err := os.UserHomeDir()
 	if err != nil {

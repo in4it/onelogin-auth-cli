@@ -8,3 +8,6 @@ accounts:
     appID: 123456
     accountID: 0123456789
     profileName: test-profile
+roles:
+  - example-admin
+  - example-readonly
