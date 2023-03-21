@@ -1,5 +1,5 @@
 .idea
-config.yaml
+/config.yaml
 /onelogin-auth-*
 .DS_Store
 .env

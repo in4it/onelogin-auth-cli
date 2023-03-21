@@ -1,5 +1,3 @@
-//go:build !testing
-
 package cmd
 
 import (
@@ -35,6 +33,14 @@ type Account struct {
 	AccountID       string            `yaml:"accountID"`
 	ProfileName     string            `yaml:"profileName"`
 	DurationSeconds int64             `yaml:"durationSeconds"`
+}
+
+func getAccountNames(accounts []Account) []string {
+	var accountsName []string
+	for _, v := range accounts {
+		accountsName = append(accountsName, v.Name)
+	}
+	return accountsName
 }
 
 func (a *Account) GetAppID(role string) string {

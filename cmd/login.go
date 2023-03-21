@@ -23,11 +23,11 @@ var loginCmd = &cobra.Command{
 
 		//Get Role and Accounts from parameters or from keyboard input
 		if len(args) != 2 {
-			role, err = getRole(config.Roles)
+			role, err = getRole(utils.GetSelectPrompt("Role", config.Roles), config.Roles)
 			if err != nil {
 				log.Fatalln(err)
 			}
-			account, err = getAccount(config.Accounts)
+			account, err = getAccount(utils.GetSelectPrompt("Account", getAccountNames(config.Accounts)), config.Accounts)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -96,7 +96,7 @@ var loginCmd = &cobra.Command{
 		var deviceID *int
 		if assertionResponse.Message == onelogin.MFA_REQUIRED_STRING {
 			fmt.Println("MFA Required, select a device:")
-			deviceID, err = getDeviceID(assertionResponse.Devices)
+			deviceID, err = getDeviceID(utils.GetSelectPrompt("MFA Device", onelogin.GetDeviceTypes(assertionResponse.Devices)), assertionResponse.Devices)
 			if err != nil {
 				log.Fatalln(err)
 			}
@@ -149,9 +149,8 @@ var loginCmd = &cobra.Command{
 	},
 }
 
-func getRole(roles []string) (*int, error) {
-
-	roleName, err := utils.PromptSelect("Role", config.Roles, false)
+func getRole(promptRunner utils.PromptRunner, roles []string) (*int, error) {
+	roleName, err := utils.PromptSelect(promptRunner, roles, false)
 	if err != nil {
 		return nil, err
 	}
@@ -163,12 +162,8 @@ func getRole(roles []string) (*int, error) {
 	return nil, fmt.Errorf("role not found")
 }
 
-func getAccount(accounts []Account) (*int, error) {
-	var accountsName []string
-	for _, v := range accounts {
-		accountsName = append(accountsName, v.Name)
-	}
-	accountName, err := utils.PromptSelect("Account", accountsName, false)
+func getAccount(promptRunner utils.PromptRunner, accounts []Account) (*int, error) {
+	accountName, err := utils.PromptSelect(promptRunner, getAccountNames(accounts), false)
 	if err != nil {
 		return nil, err
 	}
@@ -180,12 +175,8 @@ func getAccount(accounts []Account) (*int, error) {
 	return nil, fmt.Errorf("Account not found")
 }
 
-func getDeviceID(devices []onelogin.Device) (*int, error) {
-	var deviceTypes []string
-	for _, v := range devices {
-		deviceTypes = append(deviceTypes, v.DeviceType)
-	}
-	selectedDeviceType, err := utils.PromptSelect("MFA Device", deviceTypes, true)
+func getDeviceID(promptRunner utils.PromptRunner, devices []onelogin.Device) (*int, error) {
+	selectedDeviceType, err := utils.PromptSelect(promptRunner, onelogin.GetDeviceTypes(devices), true)
 	if err != nil {
 		log.Fatalln(err)
 	}

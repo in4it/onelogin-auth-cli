@@ -8,6 +8,10 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
+type PromptRunner interface {
+	Run() (int, string, error)
+}
+
 func PromptForInt(label string) (*int, error) {
 
 	validate := func(input string) error {
@@ -83,15 +87,16 @@ func PromptForSecretString(label string) (string, error) {
 	return result, nil
 }
 
-func PromptSelect(label string, options []string, skipSingleChoice bool) (string, error) {
-
-	if skipSingleChoice && len(options) == 1 {
-		return options[0], nil
-	}
-
-	prompt := promptui.Select{
+func GetSelectPrompt(label string, options []string) *promptui.Select {
+	return &promptui.Select{
 		Label: label,
 		Items: options,
+	}
+}
+
+func PromptSelect(prompt PromptRunner, options []string, skipSingleChoice bool) (string, error) {
+	if skipSingleChoice && len(options) == 1 {
+		return options[0], nil
 	}
 
 	_, result, err := prompt.Run()

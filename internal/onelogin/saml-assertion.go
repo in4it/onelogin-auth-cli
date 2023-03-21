@@ -37,6 +37,14 @@ type User struct {
 
 const SAMLAssertionURl = OneLoginAPIURL + "api/2/saml_assertion"
 
+func GetDeviceTypes(devices []Device) []string {
+	deviceTypes := []string{}
+	for _, v := range devices {
+		deviceTypes = append(deviceTypes, v.DeviceType)
+	}
+	return deviceTypes
+}
+
 func SAMLAssertion(token, login, password, appID, oneloginDomain string) (*SAMLAssertionResponse, error) {
 
 	newBody := SAMLAssertionBody{

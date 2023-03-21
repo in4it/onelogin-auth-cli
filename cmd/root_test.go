@@ -25,9 +25,21 @@ func TestGetAppID(t *testing.T) {
 	}
 }
 
-func TestLoadConfig(t *testing.T) {
-	os.Setenv("ONELOGIN_AUTH_CLI_CONFIG_FILE", "../internal/testdata/example-config.yaml")
+func TestLoadConfigEnvVar(t *testing.T) {
+	os.Setenv("ONELOGIN_AUTH_CLI_CONFIG_FILE", "../internal/testdata/config.yaml")
 	err := LoadConfig("./")
+	if err != nil {
+		t.Fatalf("LoadConfig error: %s", err)
+	}
+
+	if config.Onelogin.AccountName != "testdata" {
+		t.Fatalf("config variable doesn't contain testdata")
+	}
+
+}
+func TestLoadConfig(t *testing.T) {
+	os.Setenv("ONELOGIN_AUTH_CLI_CONFIG_FILE", "")
+	err := LoadConfig("../internal/testdata/")
 	if err != nil {
 		t.Fatalf("LoadConfig error: %s", err)
 	}
