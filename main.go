@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"onelogin-auth-cli/cmd"
 )
 
@@ -10,10 +9,5 @@ var version = "development"
 
 func main() {
 	cmd.SetVersion(version)
-	var err error
-	err = cmd.LoadConfig("./")
-	if err != nil {
-		log.Fatalln(err)
-	}
 	cmd.Execute()
 }
