@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"log"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -54,6 +55,7 @@ func (a *Account) GetAppID(role string) string {
 
 var version string
 var config Config
+var configFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -69,21 +71,32 @@ func Execute() {
 	cobra.CheckErr(rootCmd.Execute())
 }
 
-func LoadConfig(path string) (err error) {
+func init() {
+	cobra.OnInitialize(LoadConfig)
+
+	rootCmd.PersistentFlags().StringVarP(&configFile, "config", "c", "", "config file (default is config.yaml)")
+	viper.BindPFlag("config", rootCmd.Flags().Lookup("config"))
+}
+
+func LoadConfig() {
 	userDefinedConfigFile := os.Getenv("ONELOGIN_AUTH_CLI_CONFIG_FILE")
 	if userDefinedConfigFile != "" {
 		viper.SetConfigFile(userDefinedConfigFile)
 	} else {
-		viper.AddConfigPath(path)
-		viper.SetConfigName("config")
-		viper.SetConfigType("yaml")
+		if configFile == "" {
+			viper.AddConfigPath("./")
+			viper.SetConfigName("config")
+			viper.SetConfigType("yaml")
+		} else {
+			viper.SetConfigFile(configFile)
+		}
 	}
 
 	viper.AutomaticEnv()
 
-	err = viper.ReadInConfig()
+	err := viper.ReadInConfig()
 	if err != nil {
-		return
+		log.Fatal(err)
 	}
 
 	viper.BindEnv("credentials.email", "EMAIL")
@@ -91,5 +104,7 @@ func LoadConfig(path string) (err error) {
 	viper.BindEnv("credentials.otp", "OTP")
 
 	err = viper.Unmarshal(&config)
-	return
+	if err != nil {
+		log.Fatal(err)
+	}
 }

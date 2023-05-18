@@ -163,10 +163,8 @@ func TestGetDeviceID(t *testing.T) {
 }
 
 func TestLogin(t *testing.T) {
-	err := LoadConfig("../internal/testdata/")
-	if err != nil {
-		t.Fatalf("LoadConfig error: %s", err)
-	}
+	configFile = "../internal/testdata/config.yaml"
+	LoadConfig()
 	mockClient := mockOneloginClient{
 		SAMLAssertationResponse: &onelogin.SAMLAssertionResponse{},
 		VerifyFactorResponse:    &onelogin.VerifyFactorResponse{},
@@ -192,7 +190,7 @@ func TestLogin(t *testing.T) {
 			},
 		},
 	}
-	err = doLogin(mockClient, pm, &a, []string{})
+	err := doLogin(mockClient, pm, &a, []string{})
 	if err != nil {
 		t.Fatalf("Error: %s", err)
 	}
