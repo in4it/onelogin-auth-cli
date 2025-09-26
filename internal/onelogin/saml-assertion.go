@@ -81,7 +81,7 @@ func (o Client) SAMLAssertion(client HttpClient, token, login, password, appID, 
 		return nil, err
 	}
 	if responseObject.Message != "Success" && responseObject.Message != MFA_REQUIRED_STRING {
-		return nil, fmt.Errorf(responseObject.Message)
+		return nil, fmt.Errorf("%s", responseObject.Message)
 	}
 
 	return &responseObject, nil
