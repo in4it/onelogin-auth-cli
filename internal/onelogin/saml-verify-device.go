@@ -54,7 +54,7 @@ func (o Client) VerifyFactor(client HttpClient, token string, deviceID int, appI
 		return nil, err
 	}
 	if responseObject.Message != "Success" {
-		return nil, fmt.Errorf(responseObject.Message)
+		return nil, fmt.Errorf("%s", responseObject.Message)
 	}
 
 	return &responseObject, nil

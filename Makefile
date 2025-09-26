@@ -1,6 +1,9 @@
 BINARY = onelogin-auth
 
-all: build
+all: build tests
+
+tests:
+	go test -v ./...
 
 build:
 	GOOS=linux GOARCH=amd64 go build ${LDFLAGS} -o ${BINARY}-linux-amd64 main.go
